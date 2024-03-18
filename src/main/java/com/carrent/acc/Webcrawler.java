@@ -112,7 +112,7 @@ public class Webcrawler
 	
 	
 	
-	public static void WebCrawlMomondo() {
+	public static void WebCrawlExpedia() {
 		System.out.println("Crawling Momondo");
 	}
 }
