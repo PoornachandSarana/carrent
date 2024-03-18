@@ -5,7 +5,7 @@ public class Webcrawler {
 		System.out.println("Crawling Carrental");
 	}
 	
-	public static void WebCrawlMomondo() {
+	public static void WebCrawlExpedia() {
 		System.out.println("Crawling Momondo");
 	}
 }
