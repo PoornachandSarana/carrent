@@ -2,7 +2,10 @@ package com.carrent.acc;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -13,6 +16,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Date;
+
 
 
 public class Webcrawler 
@@ -110,9 +117,63 @@ public class Webcrawler
 	        }
 	    }
 	
+		public static String convertDateFormat(String inputDate, String outputFormat) {
+	        String formattedDate = "";
+	        
+	        try {
+	            SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	            SimpleDateFormat outputDateFormat = new SimpleDateFormat(outputFormat);
+	            
+	            Date date = inputDateFormat.parse(inputDate);
+	            formattedDate = outputDateFormat.format(date);
+	        } catch (ParseException e) {
+	            e.printStackTrace();
+	        }
+	        
+	        return formattedDate;
+	    }
 	
-	
-	public static void WebCrawlExpedia() {
-		System.out.println("Crawling Momondo");
-	}
+		public static void WebCrawlOrbitz(WebDriver driver) {
+			String location = "Toronto";
+			String fromDate = "2024-03-24";
+			String toDate = "2024-03-28";
+			String convertedFromDate = convertDateFormat(fromDate, "M/d/yyyy");
+			String convertedToDate = convertDateFormat(toDate, "M/d/yyyy");
+			String encodedLocation = URLEncoder.encode(location, StandardCharsets.UTF_8);
+			String encodedFromDate = URLEncoder.encode(convertedFromDate, StandardCharsets.UTF_8);
+			String encodedToDate = URLEncoder.encode(convertedToDate, StandardCharsets.UTF_8);
+			String url = String.format("https://www.orbitz.com/carsearch?locn=%s&date1=%s&date2=%s",
+                    encodedLocation, encodedFromDate, encodedToDate);
+			driver.get(url);
+
+			try {
+				WebDriverWait wait = new WebDriverWait(driver, 20);
+				// List<WebElement> offerCards = driver.findElements(By.cssSelector(".offer-card-desktop"));
+				List<WebElement> offerCards = Helper.waitForClassElementsVisible(wait, driver, "offer-card-desktop");
+				for(WebElement offerCard: offerCards) {
+					WebElement carNameElement = offerCard.findElement(By.className("uitk-text"));
+					String carName = carNameElement.getText();
+					carName = carName.replace(" or similar", "");
+					if(carName.contains("Managers Special")) continue;
+					WebElement carTypeElement = offerCard.findElement(By.tagName("h3"));
+					String carType = carTypeElement.getText();
+					WebElement noPersonsElement = offerCard.findElement(By.cssSelector("div.uitk-text span"));
+					String noPersons = noPersonsElement.getText();
+					WebElement transmissionElement = offerCard.findElement(By.cssSelector("div.uitk-text span:nth-child(5)"));
+					String transmission = transmissionElement.getText();
+					WebElement priceElement = offerCard.findElement(By.cssSelector(".per-day-price"));
+					String price = priceElement.getText();
+					WebElement linnkElement = offerCard.findElement(By.cssSelector("a[data-stid='default-link']"));
+					String link = linnkElement.getAttribute("href");
+
+					System.out.println(carName + " " +carType+ " " + noPersons + " " + transmission + " " + price);
+					System.out.println("link: "+link);
+				}
+			} catch (Exception e) {
+				// e.printStackTrace();
+				throw new RuntimeException("Error has occurred during the web crawl");
+			} finally {
+				 driver.quit();
+			}
+		}
 }
