@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -134,6 +135,7 @@ public class Webcrawler
 	    }
 	
 		public static void WebCrawlOrbitz(WebDriver driver) {
+			String excelFileName = "Web_Crawl_Orbitz.xlsx";
 			String location = "Toronto";
 			String fromDate = "2024-03-24";
 			String toDate = "2024-03-28";
@@ -147,10 +149,23 @@ public class Webcrawler
 			driver.get(url);
 
 			try {
+				Workbook workbook = new XSSFWorkbook();
+                Sheet sheet = workbook.createSheet("Vehicle Information");
+
+				 // Create headers
+				 Row headerRow = sheet.createRow(0);
+				 String[] headers = {"Vehicle Type", "Vehicle Model", "Number of Passengers", "Transmission", "Cost", "Link"};
+				 for (int i = 0; i < headers.length; i++) {
+					 Cell cell = headerRow.createCell(i);
+					 cell.setCellValue(headers[i]);
+				 }
+
 				WebDriverWait wait = new WebDriverWait(driver, 20);
 				// List<WebElement> offerCards = driver.findElements(By.cssSelector(".offer-card-desktop"));
 				List<WebElement> offerCards = Helper.waitForClassElementsVisible(wait, driver, "offer-card-desktop");
 				for(WebElement offerCard: offerCards) {
+                    Row newRow = sheet.createRow(sheet.getLastRowNum() + 1);
+
 					WebElement carNameElement = offerCard.findElement(By.className("uitk-text"));
 					String carName = carNameElement.getText();
 					carName = carName.replace(" or similar", "");
@@ -168,6 +183,26 @@ public class Webcrawler
 
 					System.out.println(carName + " " +carType+ " " + noPersons + " " + transmission + " " + price);
 					System.out.println("link: "+link);
+
+					Cell cell0 = newRow.createCell(0);
+                    cell0.setCellValue(carName);
+                    Cell cell1 = newRow.createCell(1);
+                    cell1.setCellValue(carType);
+                    Cell cell2 = newRow.createCell(2);
+                    cell2.setCellValue(noPersons);
+                    Cell cell3 = newRow.createCell(3);
+                    cell3.setCellValue(transmission);
+                    Cell cell4 = newRow.createCell(4);
+                    cell4.setCellValue(price.replaceAll("\\$", ""));
+                    Cell cell5 = newRow.createCell(5);
+                    cell5.setCellValue(link);
+				}
+
+				 // Write the workbook to file
+				 try (FileOutputStream fileOut = new FileOutputStream(excelFileName)) {
+					workbook.write(fileOut);
+					System.out.println("Excel file created successfully.");
+					workbook.close();
 				}
 			} catch (Exception e) {
 				// e.printStackTrace();
