@@ -1,3 +1,5 @@
 target
 *.class
 *.xlsx
+.project
+.DS_Store
