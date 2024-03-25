@@ -134,13 +134,13 @@ public class Webcrawler
 	        return formattedDate;
 	    }
 	
-		public static void WebCrawlOrbitz(WebDriver driver) {
+		public static void WebCrawlOrbitz(WebDriver driver, String startDate, String endDate, String location) {
 			String excelFileName = "Web_Crawl_Orbitz.xlsx";
-			String location = "Toronto";
-			String fromDate = "2024-03-24";
-			String toDate = "2024-03-28";
-			String convertedFromDate = convertDateFormat(fromDate, "M/d/yyyy");
-			String convertedToDate = convertDateFormat(toDate, "M/d/yyyy");
+			// String location = "Toronto";
+			// String fromDate = "2024-03-24";
+			// String toDate = "2024-03-28";
+			String convertedFromDate = convertDateFormat(startDate, "M/d/yyyy");
+			String convertedToDate = convertDateFormat(endDate, "M/d/yyyy");
 			String encodedLocation = URLEncoder.encode(location, StandardCharsets.UTF_8);
 			String encodedFromDate = URLEncoder.encode(convertedFromDate, StandardCharsets.UTF_8);
 			String encodedToDate = URLEncoder.encode(convertedToDate, StandardCharsets.UTF_8);
@@ -181,8 +181,8 @@ public class Webcrawler
 					WebElement linnkElement = offerCard.findElement(By.cssSelector("a[data-stid='default-link']"));
 					String link = linnkElement.getAttribute("href");
 
-					System.out.println(carName + " " +carType+ " " + noPersons + " " + transmission + " " + price);
-					System.out.println("link: "+link);
+//					System.out.println(carName + " " +carType+ " " + noPersons + " " + transmission + " " + price);
+//					System.out.println("link: "+link);
 
 					Cell cell0 = newRow.createCell(0);
                     cell0.setCellValue(carName);
@@ -201,14 +201,11 @@ public class Webcrawler
 				 // Write the workbook to file
 				 try (FileOutputStream fileOut = new FileOutputStream(excelFileName)) {
 					workbook.write(fileOut);
-					System.out.println("Excel file created successfully.");
 					workbook.close();
 				}
 			} catch (Exception e) {
 				// e.printStackTrace();
 				throw new RuntimeException("Error has occurred during the web crawl");
-			} finally {
-				 driver.quit();
 			}
 		}
 }
