@@ -3,6 +3,7 @@ package com.carrent.acc;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -69,5 +70,9 @@ public class Helper {
         String formattedDate = date.format(formatter);
 
         return formattedDate;
+    }
+    public static String getInputString(Scanner scanner) {
+        String userInput = scanner.nextLine();
+        return userInput.trim();
     }
 }
