@@ -37,7 +37,7 @@ public class Main {
 		System.out.println("Please enter the location where you want to rent your car: ");
 		String location = Helper.getInputString(scanner);
 		// TODO word completion
-		List<String> checkSpelling = WordSuggestions.spellCheck(location);
+		List<String> checkSpelling = WordSuggestions.checkcitiesSpelling(location);
 		if(checkSpelling == null) {
 			System.out.println("Please enter a valid city in Canada");
 			return getLocation(scanner);
