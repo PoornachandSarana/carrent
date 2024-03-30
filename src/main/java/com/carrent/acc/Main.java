@@ -156,9 +156,8 @@ public class Main {
 		displayRentalSummary(startDate, endDate, location, duration, scanner);
 	}
 
-	public static List<CarRentalDetails> getAllCarDetails() {
-		List<CarRentalDetails> listofCars =  new ArrayList<>();
-		try (FileInputStream fis = new FileInputStream("Web_Crawl_Orbitz.xlsx")) {
+	public static List<CarRentalDetails> readCrawledFile(List<CarRentalDetails> listofCars, String xlFilName) {
+		try (FileInputStream fis = new FileInputStream(xlFilName)) {
             Workbook readWorkbook = new XSSFWorkbook(fis);
             Sheet readSheet = readWorkbook.getSheetAt(0);
             for (Row row : readSheet) {
@@ -176,6 +175,13 @@ public class Main {
             e.printStackTrace();
 			return null;
         }
+	}
+
+	public static List<CarRentalDetails> getAllCarDetails() {
+		List<CarRentalDetails> listofCars =  new ArrayList<>();
+		readCrawledFile(listofCars, "Web_Crawl_Orbitz.xlsx");
+		readCrawledFile(listofCars, "Web_Crawl_CarRentals.xlsx");
+		return listofCars;
 	}
 
 	public static void viewVehicleOptions(Scanner scanner) {
@@ -226,6 +232,7 @@ public class Main {
 			//TODO Webcrawler Avis
 
 			Webcrawler.WebCrawlOrbitz(driver, startDate, endDate, location);
+			Webcrawler.WebCrawlCarRentals(driver, startDate, endDate, location);
 			driver.quit();
 			System.out.println("Thank you for your patience");
 			viewVehicleOptions(scanner);

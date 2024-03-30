@@ -80,7 +80,8 @@ public class webexcel {
             for (WebElement liElement : liElements) {
                 try {
                     Row newRow = sheet.createRow(sheet.getLastRowNum() + 1);
-
+                    
+                    try {
                     WebElement typeEl = driver.findElement(By.xpath("/html/body/div[2]/div[1]/div/main/div[2]/div[2]/div/div[1]/div[2]/div[2]/div[2]/ol/li[" + a + "]/div/div/div[2]/div/div[1]/div[2]/section[1]/div[1]/div[1]/div"));
                     String carType = typeEl.getText().trim();
 
@@ -95,7 +96,7 @@ public class webexcel {
 
                     WebElement priceEl = driver.findElement(By.xpath("/html/body/div[2]/div[1]/div/main/div[2]/div[2]/div/div[1]/div[2]/div[2]/div[2]/ol/li[" + a + "]/div/div/div[2]/div/div[2]/div[1]/div/section/div[1]/span"));
                     String cost = priceEl.getText().trim();
-
+                                        
                     Cell cell0 = newRow.createCell(0);
                     cell0.setCellValue(carType.replace("or", "").replace("similar", "").replace("- Vehicle determined upon pick-up", ""));
                     Cell cell1 = newRow.createCell(1);
@@ -108,6 +109,11 @@ public class webexcel {
                     cell4.setCellValue(cost.replaceAll("\\$", ""));
                     Cell cell5 = newRow.createCell(5);
                     cell5.setCellValue("carrentals");
+                    } catch(Exception e) {
+                    	System.out.println("Error at index "+a);
+                    }
+
+                  
 
                     a++;
                 } catch (Exception e) {
