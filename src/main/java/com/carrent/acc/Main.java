@@ -208,6 +208,44 @@ public class Main {
 					break;
 				case 2:
 				    System.out.println("Selected option 2");
+				    InvertedIndex index = new InvertedIndex();
+			        String[] excelFiles = {"C:\\Users\\sunny\\Desktop\\carrent\\Web_Crawl_CarRentals.xlsx", "C:\\Users\\sunny\\Desktop\\carrent\\Web_Crawl_Orbitz.xlsx"}; // Provide the paths to your Excel files
+			        index.buildIndex(excelFiles);
+
+			        System.out.println("Enter the filtering criteria:");
+			        System.out.println("1. Vehicle Type");
+			        System.out.println("2. Vehicle Model");
+			        System.out.println("3. Number of Passengers");
+			        System.out.println("4. Transmission");
+			        System.out.println("5. Cost");
+
+			        int choice = scanner.nextInt();
+			        scanner.nextLine(); // consume newline
+
+			        String criteria = "";
+			        switch (choice) {
+			            case 1:
+			                criteria = "Vehicle Type";
+			                break;
+			            case 2:
+			                criteria = "Vehicle Model";
+			                break;
+			            case 3:
+			                criteria = "Number of Passengers";
+			                break;
+			            case 4:
+			                criteria = "Transmission";
+			                break;
+			            case 5:
+			                criteria = "Cost";
+			                break;
+			            default:
+			                System.out.println("Invalid choice.");
+			                scanner.close();
+			                return;
+			        }
+
+			        index.displayOptions(criteria);
 					break;
 				case 3:
 				startApp(scanner);
@@ -223,7 +261,7 @@ public class Main {
 		System.out.println("Please wait while we get the available vehicles………");
 		try {
 			System.setProperty("webdriver.chrome.driver",
-					"/Users/sheldonkevin/Downloads/chromedriver-mac-arm64/chromedriver");
+					"C:\\Users\\sunny\\Downloads\\chromedriver.exe");
 
 			WebDriver driver = new ChromeDriver();
 			// Webcrawler.processCarRentalsWebsite(driver);
@@ -237,6 +275,7 @@ public class Main {
 			System.out.println("Thank you for your patience");
 			viewVehicleOptions(scanner);
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("There seems to be an error retrieving information. Would you like to try again? (Y/N)");
 			String tryAgain = Helper.getInputString(scanner);
 			if(tryAgain.equalsIgnoreCase("y")) {
