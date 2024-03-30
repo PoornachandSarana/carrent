@@ -9,7 +9,7 @@ public class CarRentalDetails {
     private String link;
 
     // Parameterized constructor
-    public CarRentalDetails(String vehicleModel, String vehicleType, String numberOfPassengers, String transmission, String cost, String link) {
+    public CarRentalDetails(String vehicleType, String vehicleModel, String numberOfPassengers, String transmission, String cost, String link) {
         this.vehicleType = vehicleType;
         this.vehicleModel = vehicleModel;
         this.numberOfPassengers = numberOfPassengers;

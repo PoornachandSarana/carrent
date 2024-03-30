@@ -58,6 +58,7 @@ public class Webcrawler
 				if(carType.contains("Special")) continue;
 	            WebElement carModelElement = offerCard.findElement(By.cssSelector("div.uitk-text"));
 	            String carModel = carModelElement.getText();
+				carModel = carModel.replace(" or similar", "");
 	            WebElement noPersonsElement = offerCard.findElement(By.cssSelector("span.uitk-spacing.text-attribute"));
 	            String noPersons = noPersonsElement.getText();
 	            WebElement transmissionElement = offerCard.findElement(By.xpath("//span[contains(text(), 'Automatic') or contains(text(), 'Manual')]"));
@@ -141,13 +142,13 @@ public class Webcrawler
 				List<WebElement> offerCards = Helper.waitForClassElementsVisible(wait, driver, "offer-card-desktop");
 				for(WebElement offerCard: offerCards) {
 
-					WebElement carTypeElement = offerCard.findElement(By.className("uitk-text"));
-					String carType = carTypeElement.getText();
-					carType = carType.replace(" or similar", "");
-					carType = carType.replace(" or larger - Vehicle determined upon pick-up", "");
-					if(carType.contains("Managers Special")) continue;
-					WebElement carNameElement = offerCard.findElement(By.tagName("h3"));
+					WebElement carNameElement = offerCard.findElement(By.className("uitk-text"));
 					String carName = carNameElement.getText();
+					carName = carName.replace(" or similar", "");
+					carName = carName.replace(" or larger - Vehicle determined upon pick-up", "");
+					if(carName.contains("Managers Special")) continue;
+					WebElement carTypeElement = offerCard.findElement(By.tagName("h3"));
+					String carType = carTypeElement.getText();
 					WebElement noPersonsElement = offerCard.findElement(By.cssSelector("div.uitk-text span"));
 					String noPersons = noPersonsElement.getText();
 					WebElement transmissionElement = offerCard.findElement(By.cssSelector("div.uitk-text span:nth-child(5)"));
@@ -176,9 +177,9 @@ public class Webcrawler
 					price = String.valueOf(priceNumber);
 					
 					Cell cell0 = newRow.createCell(0);
-                    cell0.setCellValue(carName);
+                    cell0.setCellValue(carType);
                     Cell cell1 = newRow.createCell(1);
-                    cell1.setCellValue(carType);
+                    cell1.setCellValue(carName);
                     Cell cell2 = newRow.createCell(2);
                     cell2.setCellValue(noPersons);
                     Cell cell3 = newRow.createCell(3);
