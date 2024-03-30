@@ -155,10 +155,24 @@ public class Webcrawler
 					String price = priceElement.getText();
 					WebElement linnkElement = offerCard.findElement(By.cssSelector("a[data-stid='default-link']"));
 					String link = linnkElement.getAttribute("href");
+					WebElement priceQualifierEle = offerCard.findElement(By.cssSelector(".per-day-price-qualifier"));
+					String priceQualifier = priceQualifierEle.getText();
 
 //					System.out.println(carName + " " +carType+ " " + noPersons + " " + transmission + " " + price);
 //					System.out.println("link: "+link);
 					Row newRow = sheet.createRow(sheet.getLastRowNum() + 1);
+					price = price.replaceAll("\\$", "");
+					int priceNumber = Integer.parseInt(price); // Convert the price string to a double
+
+
+					// Check if the qualifier contains the word "week"
+					if (priceQualifier.contains("week")) {
+						priceNumber /= 7; // If qualifier contains "week", divide price by 7
+					} else if (priceQualifier.contains("month")) {
+						priceNumber /= 30; // If qualifier contains "month", divide price by 30
+					}
+
+					price = String.valueOf(priceNumber);
 					
 					Cell cell0 = newRow.createCell(0);
                     cell0.setCellValue(carName);
@@ -169,7 +183,7 @@ public class Webcrawler
                     Cell cell3 = newRow.createCell(3);
                     cell3.setCellValue(transmission);
                     Cell cell4 = newRow.createCell(4);
-                    cell4.setCellValue(price.replaceAll("\\$", ""));
+                    cell4.setCellValue(price);
                     Cell cell5 = newRow.createCell(5);
                     cell5.setCellValue(link);
 				}
