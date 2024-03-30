@@ -163,6 +163,7 @@ public class Main {
 			//TODO Webcrawler Avis
 
 			Webcrawler.WebCrawlOrbitz(driver, startDate, endDate, location);
+			Webcrawler.WebCrawlCarRentals(driver, startDate, endDate, location);
 			driver.quit();
 			System.out.println("Thank you for your patience");
 		} catch (Exception e) {
