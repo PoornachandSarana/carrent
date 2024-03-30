@@ -141,12 +141,13 @@ public class Webcrawler
 				List<WebElement> offerCards = Helper.waitForClassElementsVisible(wait, driver, "offer-card-desktop");
 				for(WebElement offerCard: offerCards) {
 
-					WebElement carNameElement = offerCard.findElement(By.className("uitk-text"));
-					String carName = carNameElement.getText();
-					carName = carName.replace(" or similar", "");
-					if(carName.contains("Managers Special")) continue;
-					WebElement carTypeElement = offerCard.findElement(By.tagName("h3"));
+					WebElement carTypeElement = offerCard.findElement(By.className("uitk-text"));
 					String carType = carTypeElement.getText();
+					carType = carType.replace(" or similar", "");
+					carType = carType.replace(" or larger - Vehicle determined upon pick-up", "");
+					if(carType.contains("Managers Special")) continue;
+					WebElement carNameElement = offerCard.findElement(By.tagName("h3"));
+					String carName = carNameElement.getText();
 					WebElement noPersonsElement = offerCard.findElement(By.cssSelector("div.uitk-text span"));
 					String noPersons = noPersonsElement.getText();
 					WebElement transmissionElement = offerCard.findElement(By.cssSelector("div.uitk-text span:nth-child(5)"));
