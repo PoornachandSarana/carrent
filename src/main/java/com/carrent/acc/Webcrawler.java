@@ -144,6 +144,7 @@ public class Webcrawler
 					WebElement carTypeElement = offerCard.findElement(By.className("uitk-text"));
 					String carType = carTypeElement.getText();
 					carType = carType.replace(" or similar", "");
+					carType = carType.replace(" or larger - Vehicle determined upon pick-up", "");
 					if(carType.contains("Managers Special")) continue;
 					WebElement carNameElement = offerCard.findElement(By.tagName("h3"));
 					String carName = carNameElement.getText();
