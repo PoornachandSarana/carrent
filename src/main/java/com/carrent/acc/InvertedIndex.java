@@ -1,4 +1,6 @@
 package com.carrent.acc;
+import com.carrent.acc.MostFrequentlySearchedCars;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -112,7 +114,7 @@ public class InvertedIndex {
         return filteredResults;
     }
 
-    public void displayOptions(String criteria) {
+    public void displayOptions(String criteria, MostFrequentlySearchedCars wordTracker) {
         if (criteria.equals("Vehicle Type") || criteria.equals("Vehicle Model")
                 || criteria.equals("Number of Passengers") || criteria.equals("Transmission")
                 || criteria.equals("Cost")) {
@@ -154,10 +156,13 @@ public class InvertedIndex {
 
                 System.out.println("Choose a number from the list:");
                 int userChoice = scanner.nextInt();
-                scanner.nextLine(); // consume newline
                 String selectedOption = optionMap.get(userChoice);
+                System.out.println(selectedOption);
 
                 if (selectedOption != null) {
+                    // Call the searchWords method from MostFrequentlySearchedCars class
+                    wordTracker.searchWords(selectedOption);
+                    
                     System.out.println("Filtered Results based on " + criteria + " - " + selectedOption + ":");
                     List<String[]> filteredResults = filterByCriteria(criteria, selectedOption);
                     for (String[] attributes : filteredResults) {
@@ -171,14 +176,12 @@ public class InvertedIndex {
                         System.out.println(); // Add an empty line for separation
                     }
                 } else {
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid choice.");
                 }
 
                 scanner.close();
                 return;
             }
-
-            System.out.println("Enter the " + criteria + ":");
             String value = scanner.nextLine();
             List<String[]> filteredResults = filterByCriteria(criteria, value);
             if (filteredResults.isEmpty()) {
@@ -200,8 +203,7 @@ public class InvertedIndex {
         }
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    public static void FilterFromExcel(Scanner scanner, MostFrequentlySearchedCars wordTracker) {
 
         InvertedIndex index = new InvertedIndex();
         String[] excelFiles = {"C:\\Users\\sunny\\Desktop\\carrent\\Web_Crawl_CarRentals.xlsx", "C:\\Users\\sunny\\Desktop\\carrent\\Web_Crawl_Orbitz.xlsx"}; // Provide the paths to your Excel files
@@ -209,43 +211,33 @@ public class InvertedIndex {
 
         System.out.println("Enter the filtering criteria:");
         System.out.println("1. Vehicle Type");
-        System.out.println("2. Vehicle Model");
-        System.out.println("3. Number of Passengers");
-        System.out.println("4. Transmission");
-        System.out.println("5. Cost");
+        System.out.println("2. Number of Passengers");
+        System.out.println("3. Transmission");
+        System.out.println("4. Cost");
 
-        int choice;
-        do {
-            choice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // consume newline
 
-            String criteria = "";
-            switch (choice) {
-                case 1:
-                    criteria = "Vehicle Type";
-                    break;
-                case 2:
-                    criteria = "Vehicle Model";
-                    break;
-                case 3:
-                    criteria = "Number of Passengers";
-                    break;
-                case 4:
-                    criteria = "Transmission";
-                    break;
-                case 5:
-                    criteria = "Cost";
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-                    break;
-            }
+        String criteria = "";
+        switch (choice) {
+            case 1:
+                criteria = "Vehicle Type";
+                break;
+            case 2:
+                criteria = "Number of Passengers";
+                break;
+            case 3:
+                criteria = "Transmission";
+                break;
+            case 4:
+                criteria = "Cost";
+                break;
+            default:
+                System.out.println("Invalid choice.");
+                return;
+        }
 
-            if (!criteria.isEmpty()) {
-                index.displayOptions(criteria);
-            }
-        } while (choice < 1 || choice > 5);
+        index.displayOptions(criteria, wordTracker);
 
-        scanner.close();
     }
 }

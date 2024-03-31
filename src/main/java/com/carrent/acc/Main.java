@@ -186,6 +186,7 @@ public class Main {
 
 	public static void viewVehicleOptions(Scanner scanner) {
 		List<CarRentalDetails> allCars = getAllCarDetails();
+        MostFrequentlySearchedCars wordTracker = new MostFrequentlySearchedCars();
 		System.out.println("Please select the appropriate option below\n" +
 				"1. View entire list of available vehicles\n" +
 				"2. Filter based on Price, Transmission type, No. Of Passengers or Car Type\n" +
@@ -208,44 +209,7 @@ public class Main {
 					break;
 				case 2:
 				    System.out.println("Selected option 2");
-				    InvertedIndex index = new InvertedIndex();
-			        String[] excelFiles = {"C:\\Users\\sunny\\Desktop\\carrent\\Web_Crawl_CarRentals.xlsx", "C:\\Users\\sunny\\Desktop\\carrent\\Web_Crawl_Orbitz.xlsx"}; // Provide the paths to your Excel files
-			        index.buildIndex(excelFiles);
-
-			        System.out.println("Enter the filtering criteria:");
-			        System.out.println("1. Vehicle Type");
-			        System.out.println("2. Vehicle Model");
-			        System.out.println("3. Number of Passengers");
-			        System.out.println("4. Transmission");
-			        System.out.println("5. Cost");
-
-			        int choice = scanner.nextInt();
-			        scanner.nextLine(); // consume newline
-
-			        String criteria = "";
-			        switch (choice) {
-			            case 1:
-			                criteria = "Vehicle Type";
-			                break;
-			            case 2:
-			                criteria = "Vehicle Model";
-			                break;
-			            case 3:
-			                criteria = "Number of Passengers";
-			                break;
-			            case 4:
-			                criteria = "Transmission";
-			                break;
-			            case 5:
-			                criteria = "Cost";
-			                break;
-			            default:
-			                System.out.println("Invalid choice.");
-			                scanner.close();
-			                return;
-			        }
-
-			        index.displayOptions(criteria);
+				    InvertedIndex.FilterFromExcel(scanner, wordTracker);
 					break;
 				case 3:
 				startApp(scanner);
