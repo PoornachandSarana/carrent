@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class Main {
 
@@ -236,6 +237,10 @@ public class Main {
 			System.setProperty("webdriver.chrome.driver",
 					"/Users/sheldonkevin/Downloads/chromedriver-mac-arm64/chromedriver");
 
+			ChromeOptions options = new ChromeOptions();
+
+			options.addArguments("--start-maximized");
+
 			WebDriver driver = new ChromeDriver();
 			// Webcrawler.processCarRentalsWebsite(driver);
 
@@ -287,7 +292,6 @@ public class Main {
 		System.out.println();
 		Scanner scanner = new Scanner(System.in);
 		startApp(scanner);
-//		viewVehicleOptions(scanner);
 		scanner.close();
 	}
 

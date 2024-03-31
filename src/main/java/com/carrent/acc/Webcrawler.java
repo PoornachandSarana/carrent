@@ -36,6 +36,7 @@ public class Webcrawler
 	    String url = String.format("https://www.carrentals.com/carsearch?locn=%s&date1=%s&date2=%s",
 	            encodedLocation, encodedFromDate, encodedToDate);
 	    driver.get(url);
+		driver.manage().window().fullscreen();
 
 	    try {
 	        Workbook workbook = new XSSFWorkbook();
@@ -124,6 +125,7 @@ public class Webcrawler
 			String url = String.format("https://www.orbitz.com/carsearch?locn=%s&date1=%s&date2=%s",
                     encodedLocation, encodedFromDate, encodedToDate);
 			driver.get(url);
+			driver.manage().window().fullscreen();
 
 			try {
 				Workbook workbook = new XSSFWorkbook();
