@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringJoiner;
+import java.util.TreeMap;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,6 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class Main {
 
@@ -184,9 +186,19 @@ public class Main {
 		return listofCars;
 	}
 
-	public static void viewVehicleOptions(Scanner scanner) {
+	public static void getAndCountVehicles(Scanner scanner) {
 		List<CarRentalDetails> allCars = getAllCarDetails();
-        MostFrequentlySearchedCars wordTracker = new MostFrequentlySearchedCars();
+		MostFrequentlySearchedCars wordTracker = new MostFrequentlySearchedCars();
+		System.out.println("\nPlease find the list of car models below:");
+		TreeMap<String, Integer> vehicleTypeCount = CarWordCount.countCarTypes(allCars);
+		System.out.println();
+		CarWordCount.printAllVehiclesCounted(vehicleTypeCount);
+		System.out.println();
+		System.out.println();
+		viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
+	}
+
+	public static void viewVehicleOptions(Scanner scanner, List<CarRentalDetails> allCars, TreeMap<String, Integer> vehicleTypeCount, MostFrequentlySearchedCars wordTracker) {
 		System.out.println("Please select the appropriate option below\n" +
 				"1. View entire list of available vehicles\n" +
 				"2. Filter based on Price, Transmission type, No. Of Passengers or Car Type\n" +
@@ -195,7 +207,7 @@ public class Main {
 		String appropriateOpt = scanner.nextLine();
 		if(!(appropriateOpt.equalsIgnoreCase("1") || appropriateOpt.equalsIgnoreCase("2") || appropriateOpt.equalsIgnoreCase("3"))) {
 			System.out.println("Please enter a valid option");
-			viewVehicleOptions(scanner);
+			viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
 		}
 		else {
 			int optionSelected = Integer.parseInt(appropriateOpt);
@@ -205,11 +217,12 @@ public class Main {
 					for(CarRentalDetails car: allCars) {
 						System.out.println(car.toString());
 					}
-					viewVehicleOptions(scanner);
+					viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
 					break;
 				case 2:
 				    System.out.println("Selected option 2");
 				    InvertedIndex.FilterFromExcel(scanner, wordTracker);
+					viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
 					break;
 				case 3:
 				startApp(scanner);
@@ -221,11 +234,15 @@ public class Main {
 		}
 	}
 
-	public static void getData(String startDate, String endDate, String location, Scanner scanner) {
+	public static void getData(String startDate, String endDate, String location, String duration, Scanner scanner) {
 		System.out.println("Please wait while we get the available vehicles………");
 		try {
 			System.setProperty("webdriver.chrome.driver",
 					"C:\\Users\\sunny\\Downloads\\chromedriver.exe");
+
+			ChromeOptions options = new ChromeOptions();
+
+			options.addArguments("--start-maximized");
 
 			WebDriver driver = new ChromeDriver();
 			// Webcrawler.processCarRentalsWebsite(driver);
@@ -233,17 +250,18 @@ public class Main {
 			//TODO Webcrawler Carrentals
 			//TODO Webcrawler Avis
 
-			Webcrawler.WebCrawlOrbitz(driver, startDate, endDate, location);
-			Webcrawler.WebCrawlCarRentals(driver, startDate, endDate, location);
+			int rentLen = Integer.parseInt(duration);
+			Webcrawler.WebCrawlOrbitz(driver, startDate, endDate, rentLen, location);
+			Webcrawler.WebCrawlCarRentals(driver, startDate, endDate, rentLen, location);
 			driver.quit();
 			System.out.println("Thank you for your patience");
-			viewVehicleOptions(scanner);
+			getAndCountVehicles(scanner);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("There seems to be an error retrieving information. Would you like to try again? (Y/N)");
 			String tryAgain = Helper.getInputString(scanner);
 			if(tryAgain.equalsIgnoreCase("y")) {
-				getData(startDate,  endDate,  location, scanner);
+				getData(startDate,  endDate,  location, duration, scanner);
 				return;
 			}
 		}
@@ -257,7 +275,7 @@ public class Main {
 			changeDetails(startDate,  endDate,  location,  duration, scanner);
 			return;
 		} else if (correctDetails.equalsIgnoreCase("y")) {
-			getData(startDate,  endDate,  location, scanner);
+			getData(startDate,  endDate,  location, duration, scanner);
 			return;
 		} else {
 			System.out.println("Please Enter a valid option");
@@ -279,6 +297,7 @@ public class Main {
 		System.out.println();
 		Scanner scanner = new Scanner(System.in);
 		startApp(scanner);
+//		getAndCountVehicles(scanner);
 		scanner.close();
 	}
 

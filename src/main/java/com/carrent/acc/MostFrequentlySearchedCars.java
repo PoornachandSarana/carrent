@@ -26,10 +26,10 @@ public class MostFrequentlySearchedCars {
         maxHeap.addAll(wordSearchCounts.entrySet());
 
         // Display the top 3 most frequently searched words
-        displayTopFrequentWords();
+        // displayTopFrequentWords();
     }
 
-    private void displayTopFrequentWords() {
+    public void displayTopFrequentWords() {
         // Display the top 3 most frequent words
         int count = 0;
         System.out.println("Top 3 most frequently searched cars:");

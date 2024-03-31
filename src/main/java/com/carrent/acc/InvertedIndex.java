@@ -75,11 +75,6 @@ public class InvertedIndex {
                             filteredResults.add(attributes);
                         }
                         break;
-                    case "vehicle model":
-                        if (attributes[1].equalsIgnoreCase(value)) {
-                            filteredResults.add(attributes);
-                        }
-                        break;
                     case "number of passengers":
                         if (attributes[2].equalsIgnoreCase(value)) {
                             filteredResults.add(attributes);
@@ -114,11 +109,10 @@ public class InvertedIndex {
         return filteredResults;
     }
 
-    public void displayOptions(String criteria, MostFrequentlySearchedCars wordTracker) {
+    public void displayOptions(String criteria, MostFrequentlySearchedCars wordTracker, Scanner scanner) {
         if (criteria.equals("Vehicle Type") || criteria.equals("Vehicle Model")
                 || criteria.equals("Number of Passengers") || criteria.equals("Transmission")
                 || criteria.equals("Cost")) {
-            Scanner scanner = new Scanner(System.in);
             if (criteria.equals("Cost")) {
                 System.out.println("Enter the cost range in the format 'min-max' (e.g., 100-500):");
             } else {
@@ -129,9 +123,6 @@ public class InvertedIndex {
                         switch (criteria.toLowerCase()) {
                             case "vehicle type":
                                 options.add(attributes[0]);
-                                break;
-                            case "vehicle model":
-                                options.add(attributes[1]);
                                 break;
                             case "number of passengers":
                                 options.add(attributes[2]);
@@ -160,7 +151,8 @@ public class InvertedIndex {
                 System.out.println(selectedOption);
 
                 if (selectedOption != null) {
-                    // Call the searchWords method from MostFrequentlySearchedCars class
+                    // Call the searchWords method from MostFrequentlySearchedCars class      
+                    if(criteria.equals("Vehicle Type"))          
                     wordTracker.searchWords(selectedOption);
                     
                     System.out.println("Filtered Results based on " + criteria + " - " + selectedOption + ":");
@@ -179,7 +171,6 @@ public class InvertedIndex {
                     System.out.println("Invalid choice.");
                 }
 
-                scanner.close();
                 return;
             }
             String value = scanner.nextLine();
@@ -199,7 +190,6 @@ public class InvertedIndex {
                     System.out.println(); // Add an empty line for separation
                 }
             }
-            scanner.close();
         }
     }
 
@@ -222,6 +212,7 @@ public class InvertedIndex {
         switch (choice) {
             case 1:
                 criteria = "Vehicle Type";
+                wordTracker.displayTopFrequentWords();
                 break;
             case 2:
                 criteria = "Number of Passengers";
@@ -237,7 +228,7 @@ public class InvertedIndex {
                 return;
         }
 
-        index.displayOptions(criteria, wordTracker);
+        index.displayOptions(criteria, wordTracker, scanner);
 
     }
 }
