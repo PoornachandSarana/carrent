@@ -26,7 +26,13 @@
     <artifactId>selenium-java</artifactId>
     <version>3.141.59</version> <!-- Change this version to the one you want -->
 </dependency>
-<dependency>
+      <dependency>
+          <groupId>org.jsoup</groupId>
+          <artifactId>jsoup</artifactId>
+          <version>1.15.2</version> <!-- Replace with the latest version -->
+      </dependency>
+
+      <dependency>
     <groupId>org.apache.poi</groupId>
     <artifactId>poi</artifactId>
     <version>5.2.5</version>

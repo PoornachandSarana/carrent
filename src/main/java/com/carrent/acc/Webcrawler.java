@@ -23,9 +23,9 @@ import java.util.Date;
 
 
 
-public class Webcrawler 
+public class Webcrawler
 {
-		public static void processCarRentalsWebsite(WebDriver driver) 
+		public static void processCarRentalsWebsite(WebDriver driver)
 		{
 	        // region Opening the carrentals website
 	        driver.get("https://www.carrentals.com/");
@@ -71,20 +71,20 @@ public class Webcrawler
 
 	                    WebElement typeEl = driver.findElement(By.xpath("/html/body/div[2]/div[1]/div/main/div[2]/div[2]/div/div[1]/div[2]/div[2]/div[2]/ol/li[" + a + "]/div/div/div[2]/div/div[1]/div[2]/section[1]/div[1]/div[1]/div"));
 	                    String carType = typeEl.getText().trim();
-	                    
+
 	                    WebElement modelEl = driver.findElement(By.xpath("/html/body/div[2]/div[1]/div/main/div[2]/div[2]/div/div[1]/div[2]/div[2]/div[2]/ol/li[" + a + "]/div/div/div[2]/div/div[1]/div[1]/h3"));
 	                    String model = modelEl.getText().trim();
 
 	                    WebElement passengerEl = driver.findElement(By.xpath("/html/body/div[2]/div[1]/div/main/div[2]/div[2]/div/div[1]/div[2]/div[2]/div[2]/ol/li[" + a + "]/div/div/div[2]/div/div[1]/div[2]/section[1]/div[1]/div[2]/div/span[1]"));
 	                    String passengers = passengerEl.getText().trim();
-	                    
+
 	                    WebElement transmissionEl = driver.findElement(By.xpath("/html/body/div[2]/div[1]/div/main/div[2]/div[2]/div/div[1]/div[2]/div[2]/div[2]/ol/li[" + a + "]/div/div/div[2]/div/div[1]/div[2]/section[1]/div[1]/div[2]/div/span[3]"));
 	                    String transmission = transmissionEl.getText().trim();
-	                    
+
 	                    WebElement priceEl = driver.findElement(By.xpath("/html/body/div[2]/div[1]/div/main/div[2]/div[2]/div/div[1]/div[2]/div[2]/div[2]/ol/li[" + a + "]/div/div/div[2]/div/div[2]/div[1]/div/section/div[1]/span"));
 	                    String cost = priceEl.getText().trim();
 
-	                    	
+
 
 	                    Cell cell0 = newRow.createCell(0);
 	                    cell0.setCellValue(carType.replace("or", "").replace("similar", "").replace("- Vehicle determined upon pick-up", ""));
@@ -98,7 +98,7 @@ public class Webcrawler
 	                    cell4.setCellValue(cost.replaceAll("\\$", ""));
 	                    Cell cell5 = newRow.createCell(5);
 	                    cell5.setCellValue("carrentals");
-	                  
+
 
 	                    // Save the changes to the Excel file
 	                    FileOutputStream fileOutputStream = new FileOutputStream(excelFilePath);
@@ -117,23 +117,23 @@ public class Webcrawler
 	            throw new RuntimeException("Error occurred during web automation. Retrying...");
 	        }
 	    }
-	
+
 		public static String convertDateFormat(String inputDate, String outputFormat) {
 	        String formattedDate = "";
-	        
+
 	        try {
 	            SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	            SimpleDateFormat outputDateFormat = new SimpleDateFormat(outputFormat);
-	            
+
 	            Date date = inputDateFormat.parse(inputDate);
 	            formattedDate = outputDateFormat.format(date);
 	        } catch (ParseException e) {
 	            e.printStackTrace();
 	        }
-	        
+
 	        return formattedDate;
 	    }
-	
+
 		public static void WebCrawlOrbitz(WebDriver driver, String startDate, String endDate, String location) {
 			String excelFileName = "Web_Crawl_Orbitz.xlsx";
 			// String location = "Toronto";
@@ -207,5 +207,8 @@ public class Webcrawler
 				// e.printStackTrace();
 				throw new RuntimeException("Error has occurred during the web crawl");
 			}
+		}
+		public static void HTMLParse(WebDriver driver, String startDate, String endDate, String location){
+
 		}
 }
