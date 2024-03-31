@@ -188,16 +188,17 @@ public class Main {
 
 	public static void getAndCountVehicles(Scanner scanner) {
 		List<CarRentalDetails> allCars = getAllCarDetails();
+		MostFrequentlySearchedCars wordTracker = new MostFrequentlySearchedCars();
 		System.out.println("\nPlease find the list of car models below:");
 		TreeMap<String, Integer> vehicleTypeCount = CarWordCount.countCarTypes(allCars);
 		System.out.println();
 		CarWordCount.printAllVehiclesCounted(vehicleTypeCount);
 		System.out.println();
 		System.out.println();
-		viewVehicleOptions(scanner, allCars, vehicleTypeCount);
+		viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
 	}
 
-	public static void viewVehicleOptions(Scanner scanner, List<CarRentalDetails> allCars, TreeMap<String, Integer> vehicleTypeCount) {
+	public static void viewVehicleOptions(Scanner scanner, List<CarRentalDetails> allCars, TreeMap<String, Integer> vehicleTypeCount, MostFrequentlySearchedCars wordTracker) {
 		System.out.println("Please select the appropriate option below\n" +
 				"1. View entire list of available vehicles\n" +
 				"2. Filter based on Price, Transmission type, No. Of Passengers or Car Type\n" +
@@ -206,7 +207,7 @@ public class Main {
 		String appropriateOpt = scanner.nextLine();
 		if(!(appropriateOpt.equalsIgnoreCase("1") || appropriateOpt.equalsIgnoreCase("2") || appropriateOpt.equalsIgnoreCase("3"))) {
 			System.out.println("Please enter a valid option");
-			viewVehicleOptions(scanner, allCars, vehicleTypeCount);
+			viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
 		}
 		else {
 			int optionSelected = Integer.parseInt(appropriateOpt);
@@ -216,10 +217,12 @@ public class Main {
 					for(CarRentalDetails car: allCars) {
 						System.out.println(car.toString());
 					}
-					viewVehicleOptions(scanner, allCars, vehicleTypeCount);
+					viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
 					break;
 				case 2:
 				    System.out.println("Selected option 2");
+				    InvertedIndex.FilterFromExcel(scanner, wordTracker);
+					viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
 					break;
 				case 3:
 				startApp(scanner);
@@ -235,7 +238,7 @@ public class Main {
 		System.out.println("Please wait while we get the available vehicles………");
 		try {
 			System.setProperty("webdriver.chrome.driver",
-					"/Users/sheldonkevin/Downloads/chromedriver-mac-arm64/chromedriver");
+					"C:\\Users\\sunny\\Downloads\\chromedriver.exe");
 
 			ChromeOptions options = new ChromeOptions();
 
@@ -254,6 +257,7 @@ public class Main {
 			System.out.println("Thank you for your patience");
 			getAndCountVehicles(scanner);
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("There seems to be an error retrieving information. Would you like to try again? (Y/N)");
 			String tryAgain = Helper.getInputString(scanner);
 			if(tryAgain.equalsIgnoreCase("y")) {
@@ -293,6 +297,7 @@ public class Main {
 		System.out.println();
 		Scanner scanner = new Scanner(System.in);
 		startApp(scanner);
+//		getAndCountVehicles(scanner);
 		scanner.close();
 	}
 
