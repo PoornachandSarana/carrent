@@ -37,6 +37,16 @@ public class Main {
 		System.out.println("Please enter the location where you want to rent your car: ");
 		String location = Helper.getInputString(scanner);
 		// TODO word completion
+		WordSuggestions wordSuggestions = new WordSuggestions();
+		List<String> suggestions = wordSuggestions.getCitySuggestions(location);       
+		if (suggestions.isEmpty()) {
+            System.out.println("No matching cities found.");
+        } else {
+            System.out.println("Matching cities:");
+            for (String suggestion : suggestions) {
+                System.out.println(suggestion);
+            }
+        }
 		List<String> checkSpelling = WordSuggestions.checkcitiesSpelling(location);
 		if(checkSpelling == null) {
 			System.out.println("Please enter a valid city in Canada");
@@ -190,9 +200,10 @@ public class Main {
 				"1. View entire list of available vehicles\n" +
 				"2. Filter based on Price, Transmission type, No. Of Passengers or Car Type\n" +
 				"3. Crawl Data Again\n" +
+				"4. page rankn\n" +
 				"");
 		String appropriateOpt = scanner.nextLine();
-		if(!(appropriateOpt.equalsIgnoreCase("1") || appropriateOpt.equalsIgnoreCase("2") || appropriateOpt.equalsIgnoreCase("3"))) {
+		if(!(appropriateOpt.equalsIgnoreCase("1") || appropriateOpt.equalsIgnoreCase("2") || appropriateOpt.equalsIgnoreCase("3") || appropriateOpt.equalsIgnoreCase("4"))) {
 			System.out.println("Please enter a valid option");
 			viewVehicleOptions(scanner);
 		}
@@ -211,6 +222,19 @@ public class Main {
 					break;
 				case 3:
 				startApp(scanner);
+					break;
+	            case 4: // Case for pagerank
+	                System.out.println("Selected option 4: PageRank");
+	                // Prompt user for keyword
+	                System.out.println("Enter a keyword to perform page ranking:");
+	                String keyword = scanner.nextLine();
+	                try {
+	                    // Call displayPageRanking method with user input keyword
+	                    pagerank.displayPageRanking("Web_Crawl_Orbitz.xlsx","Web_Crawl_CarRentals.xlsx", keyword);
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	                viewVehicleOptions(scanner); // After displaying pagerank, return to main menu
 					break;
 			
 				default:
