@@ -26,7 +26,7 @@ import java.util.Date;
 
 public class Webcrawler 
 {
-	public static void WebCrawlCarRentals(WebDriver driver, String startDate, String endDate, String location) {
+	public static void WebCrawlCarRentals(WebDriver driver, String startDate, String endDate, int duration, String location) {
 	    String excelFileName = "Web_Crawl_CarRentals.xlsx";
 	    String convertedFromDate = convertDateFormat(startDate, "M/d/yyyy");
 	    String convertedToDate = convertDateFormat(endDate, "M/d/yyyy");
@@ -36,6 +36,7 @@ public class Webcrawler
 	    String url = String.format("https://www.carrentals.com/carsearch?locn=%s&date1=%s&date2=%s",
 	            encodedLocation, encodedFromDate, encodedToDate);
 	    driver.get(url);
+		driver.manage().window().fullscreen();
 
 	    try {
 	        Workbook workbook = new XSSFWorkbook();
@@ -63,11 +64,13 @@ public class Webcrawler
 	            String noPersons = noPersonsElement.getText();
 	            WebElement transmissionElement = offerCard.findElement(By.xpath("//span[contains(text(), 'Automatic') or contains(text(), 'Manual')]"));
 	            String transmission = transmissionElement.getText();
-	            WebElement priceElement = offerCard.findElement(By.cssSelector("span.per-day-price"));
-	            String price = priceElement.getText();
+	            WebElement priceElement = offerCard.findElement(By.cssSelector(".total-price"));
+	            String price = priceElement.getText().replaceAll("\\$", "");
 	            WebElement linkElement = offerCard.findElement(By.cssSelector("a[data-stid='default-link']"));
 	            String link = linkElement.getAttribute("href");
-	            
+	            int priceNumber = Integer.parseInt(price) / duration;
+				price = String.valueOf(priceNumber);
+
 	            Row newRow = sheet.createRow(sheet.getLastRowNum() + 1);
 
 	            // Write data to cells
@@ -80,7 +83,7 @@ public class Webcrawler
 	            Cell cell3 = newRow.createCell(3);
 	            cell3.setCellValue(transmission);
 	            Cell cell4 = newRow.createCell(4);
-	            cell4.setCellValue(price.replaceAll("\\$", ""));
+	            cell4.setCellValue(price);
 	            Cell cell5 = newRow.createCell(5);
 	            cell5.setCellValue(link);
 	        }
@@ -111,7 +114,7 @@ public class Webcrawler
 	        return formattedDate;
 	    }
 	
-		public static void WebCrawlOrbitz(WebDriver driver, String startDate, String endDate, String location) {
+		public static void WebCrawlOrbitz(WebDriver driver, String startDate, String endDate, int duration, String location) {
 			String excelFileName = "Web_Crawl_Orbitz.xlsx";
 			// String location = "Toronto";
 			// String fromDate = "2024-03-24";
@@ -124,6 +127,7 @@ public class Webcrawler
 			String url = String.format("https://www.orbitz.com/carsearch?locn=%s&date1=%s&date2=%s",
                     encodedLocation, encodedFromDate, encodedToDate);
 			driver.get(url);
+			driver.manage().window().fullscreen();
 
 			try {
 				Workbook workbook = new XSSFWorkbook();
@@ -153,26 +157,18 @@ public class Webcrawler
 					String noPersons = noPersonsElement.getText();
 					WebElement transmissionElement = offerCard.findElement(By.cssSelector("div.uitk-text span:nth-child(5)"));
 					String transmission = transmissionElement.getText();
-					WebElement priceElement = offerCard.findElement(By.cssSelector(".per-day-price"));
+					WebElement priceElement = offerCard.findElement(By.cssSelector(".total-price"));
 					String price = priceElement.getText();
 					WebElement linnkElement = offerCard.findElement(By.cssSelector("a[data-stid='default-link']"));
 					String link = linnkElement.getAttribute("href");
-					WebElement priceQualifierEle = offerCard.findElement(By.cssSelector(".per-day-price-qualifier"));
-					String priceQualifier = priceQualifierEle.getText();
+					// WebElement priceQualifierEle = offerCard.findElement(By.cssSelector(".per-day-price-qualifier"));
+					// String priceQualifier = priceQualifierEle.getText();
 
 //					System.out.println(carName + " " +carType+ " " + noPersons + " " + transmission + " " + price);
 //					System.out.println("link: "+link);
 					Row newRow = sheet.createRow(sheet.getLastRowNum() + 1);
 					price = price.replaceAll("\\$", "");
-					int priceNumber = Integer.parseInt(price); // Convert the price string to a double
-
-
-					// Check if the qualifier contains the word "week"
-					if (priceQualifier.contains("week")) {
-						priceNumber /= 7; // If qualifier contains "week", divide price by 7
-					} else if (priceQualifier.contains("month")) {
-						priceNumber /= 30; // If qualifier contains "month", divide price by 30
-					}
+					int priceNumber = Integer.parseInt(price) / duration;
 
 					price = String.valueOf(priceNumber);
 					
@@ -196,7 +192,6 @@ public class Webcrawler
 					workbook.close();
 				}
 			} catch (Exception e) {
-				// e.printStackTrace();
 				throw new RuntimeException("Error has occurred during the web crawl");
 			}
 		}
