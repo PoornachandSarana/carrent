@@ -231,7 +231,7 @@ public class Main {
 		}
 	}
 
-	public static void getData(String startDate, String endDate, String location, Scanner scanner) {
+	public static void getData(String startDate, String endDate, String location, String duration, Scanner scanner) {
 		System.out.println("Please wait while we get the available vehicles………");
 		try {
 			System.setProperty("webdriver.chrome.driver",
@@ -247,8 +247,9 @@ public class Main {
 			//TODO Webcrawler Carrentals
 			//TODO Webcrawler Avis
 
-			Webcrawler.WebCrawlOrbitz(driver, startDate, endDate, location);
-			Webcrawler.WebCrawlCarRentals(driver, startDate, endDate, location);
+			int rentLen = Integer.parseInt(duration);
+			Webcrawler.WebCrawlOrbitz(driver, startDate, endDate, rentLen, location);
+			Webcrawler.WebCrawlCarRentals(driver, startDate, endDate, rentLen, location);
 			driver.quit();
 			System.out.println("Thank you for your patience");
 			getAndCountVehicles(scanner);
@@ -256,7 +257,7 @@ public class Main {
 			System.out.println("There seems to be an error retrieving information. Would you like to try again? (Y/N)");
 			String tryAgain = Helper.getInputString(scanner);
 			if(tryAgain.equalsIgnoreCase("y")) {
-				getData(startDate,  endDate,  location, scanner);
+				getData(startDate,  endDate,  location, duration, scanner);
 				return;
 			}
 		}
@@ -270,7 +271,7 @@ public class Main {
 			changeDetails(startDate,  endDate,  location,  duration, scanner);
 			return;
 		} else if (correctDetails.equalsIgnoreCase("y")) {
-			getData(startDate,  endDate,  location, scanner);
+			getData(startDate,  endDate,  location, duration, scanner);
 			return;
 		} else {
 			System.out.println("Please Enter a valid option");
