@@ -116,9 +116,6 @@ public class Webcrawler
 	
 		public static void WebCrawlOrbitz(WebDriver driver, String startDate, String endDate, int duration, String location) {
 			String excelFileName = "Web_Crawl_Orbitz.xlsx";
-			// String location = "Toronto";
-			// String fromDate = "2024-03-24";
-			// String toDate = "2024-03-28";
 			String convertedFromDate = convertDateFormat(startDate, "M/d/yyyy");
 			String convertedToDate = convertDateFormat(endDate, "M/d/yyyy");
 			String encodedLocation = URLEncoder.encode(location, StandardCharsets.UTF_8);
@@ -142,7 +139,6 @@ public class Webcrawler
 				 }
 
 				WebDriverWait wait = new WebDriverWait(driver, 20);
-				// List<WebElement> offerCards = driver.findElements(By.cssSelector(".offer-card-desktop"));
 				List<WebElement> offerCards = Helper.waitForClassElementsVisible(wait, driver, "offer-card-desktop");
 				for(WebElement offerCard: offerCards) {
 
@@ -161,11 +157,6 @@ public class Webcrawler
 					String price = priceElement.getText();
 					WebElement linnkElement = offerCard.findElement(By.cssSelector("a[data-stid='default-link']"));
 					String link = linnkElement.getAttribute("href");
-					// WebElement priceQualifierEle = offerCard.findElement(By.cssSelector(".per-day-price-qualifier"));
-					// String priceQualifier = priceQualifierEle.getText();
-
-//					System.out.println(carName + " " +carType+ " " + noPersons + " " + transmission + " " + price);
-//					System.out.println("link: "+link);
 					Row newRow = sheet.createRow(sheet.getLastRowNum() + 1);
 					price = price.replaceAll("\\$", "");
 					int priceNumber = Integer.parseInt(price) / duration;
