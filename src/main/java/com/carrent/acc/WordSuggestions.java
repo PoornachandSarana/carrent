@@ -69,7 +69,11 @@ public class WordSuggestions {
 
     
     //BST for storing the cities in canada
-
+    /*This class represents a node in the Binary Search Tree. 
+     * Each node contains a city (String), a reference to its left child (left), 
+     * and a reference to its right child (right).The constructor initializes a node 
+     * with the given city and sets its children to null.
+     */
     private static class BSTNode 
     {
         String city;
@@ -124,7 +128,11 @@ public class WordSuggestions {
 
         return root;
     }
-
+    /* The main aim of this feature is to make user experience easy by 
+     * providing some suggestions to them. We implemented this feature at 
+     * the start of our application. We ask the user to enter the user city
+     *  from which they want to rent the car. 
+     */
     List<String> getCitySuggestions(String partialName) 
     {
         List<String> suggestions = new ArrayList<>();

@@ -40,7 +40,6 @@ public class Main {
 	public static String getLocation(Scanner scanner) {
 		System.out.println("Please enter the location where you want to rent your car: ");
 		String location = Helper.getInputString(scanner);
-		// TODO word completion
 		WordSuggestions wordSuggestions = new WordSuggestions();
 		List<String> suggestions = wordSuggestions.getCitySuggestions(location);   
 		List<String> checkSpelling = WordSuggestions.checkcitiesSpelling(location);

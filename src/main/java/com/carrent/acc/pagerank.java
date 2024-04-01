@@ -15,8 +15,21 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+/*The main aim of our page ranking feature in our project is to make user experience 
+ * as easy as possible. To do this what we did is we implemented page ranking so as that 
+ * based on “vehicle Type” or “Vehicle Model” the data that is scrapped from 3 websites 
+ * namely “WebOrbitz”, “carrentals”, and “Expedia” are ranked according to the greatest 
+ * number of occurrences on the top. While generating the output for making the user experience 
+ * better we have also mentioned number of occurrences of each preference in all the 3 websites.
+ */
 public class pagerank {
-
+	/*  This method takes four parameters: three file paths representing the
+	 *  paths to the three Excel files (filePath1, filePath2, filePath3), 
+	 *  and targetColumn representing the column in the Excel files where the page ranking is to be calculated.
+	 *  Inside this method, it retrieves the page ranking for the specified 
+	 *  targetColumn from each of the three Excel files using the getPageRanking method and then compares 
+	 *  and displays the combined page ranking using the compareAndDisplayPageRanking method
+	 */
     static void displayPageRanking(String filePath1, String filePath2, String filePath3, String targetColumn) throws IOException {
         // Get the page ranking for the specified column (Vehicle Type) in all three files
         Map<String, Integer> pageRanking1 = getPageRanking(filePath1, targetColumn);
@@ -26,7 +39,14 @@ public class pagerank {
         // Compare occurrences and display the sorted result
         compareAndDisplayPageRanking(pageRanking1, pageRanking2, pageRanking3);
     }
-
+    
+    /* This method takes two parameters: the file path (filePath) 
+     * and the target column (targetColumn) where the page ranking is 
+     * to be calculated.
+     * It reads the Excel file located at filePath, searches for the targetColumn, 
+     * and updates the keywordOccurrences map with the occurrences of keywords 
+     * found in that column.
+	 */
     private static Map<String, Integer> getPageRanking(String filePath, String targetColumn) throws IOException {
         Map<String, Integer> keywordOccurrences = new HashMap<>();
 
@@ -74,6 +94,11 @@ public class pagerank {
         return -1;
     }
 
+    /* This method takes three parameters: maps representing the page rankings 
+     * from each of the three Excel files (pageRanking1, pageRanking2, pageRanking3).
+     * It merges the three-page rankings into one map (mergedPageRanking) 
+     * and sorts this merged map based on occurrences in descending order.
+	 */
     private static void compareAndDisplayPageRanking(Map<String, Integer> pageRanking1, Map<String, Integer> pageRanking2, Map<String, Integer> pageRanking3) {
         // Merge the three page rankings
         Map<String, Integer> mergedPageRanking = new HashMap<>(pageRanking1);
