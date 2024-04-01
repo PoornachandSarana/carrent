@@ -5,6 +5,8 @@ import com.carrent.acc.MostFrequentlySearchedCars;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook; // if using XLSX files
@@ -185,6 +187,17 @@ public class InvertedIndex {
             String value = scanner.nextLine();
             List<String[]> filteredResults = filterByCriteria(criteria, value);
             if (filteredResults.isEmpty()) {
+                if(criteria.equalsIgnoreCase("cost")) {
+                    String regex = "\\d+-\\d+";
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(value);
+                    if (!matcher.matches()) {
+                        System.out.println("Invalid Format Entered");
+                    } else {
+                        System.out.println("No results found");
+                    }
+                }
+                else
                 System.out.println("No results found.");
             } else {
                 System.out.println("Filtered Results based on " + criteria + " - " + value + ":");
