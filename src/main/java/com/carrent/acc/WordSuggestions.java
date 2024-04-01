@@ -104,7 +104,8 @@ public class WordSuggestions {
             }
         } catch (IOException e) 
         {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            System.out.println("There seems to be an error. Please try again at a later time");
         }
     }
 
