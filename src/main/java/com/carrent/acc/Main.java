@@ -242,9 +242,47 @@ public class Main {
 					break;
 	            case 4: // Case for pagerank
 	                System.out.println("Let me help you in ranking");
-	                // Prompt user for keyword
-	                System.out.println("What is your preference (Vehicle Type or Vehicle Model):");
-	                String keyword = scanner.nextLine();
+	             // Prompt user for preference
+	                System.out.println("Please select your preference:");
+	                System.out.println("1. Vehicle Type");
+	                System.out.println("2. Vehicle Model");
+	                System.out.print("Enter the corresponding number: ");
+
+	                // Read user input
+	                String preferenceInput = scanner.nextLine();
+
+	                // Handle user preference
+	                String keyword;
+	                switch (preferenceInput) {
+	                    case "1":
+	                        keyword = "Vehicle Type";
+	                        break;
+	                    case "2":
+	                        keyword = "Vehicle Model";
+	                        break;
+	                    default:
+	                        System.out.println("Invalid input. Please enter either '1' for Vehicle Type or '2' for Vehicle Model.");
+	                        // Ask the user to input again
+	                        System.out.println("Please try again:");
+	                        preferenceInput = scanner.nextLine();
+	                        // Handle user preference again
+	                        switch (preferenceInput) {
+	                            case "1":
+	                                keyword = "Vehicle Type";
+	                                break;
+	                            case "2":
+	                                keyword = "Vehicle Model";
+	                                break;
+	                            default:
+	                                // If the user still provides an invalid input, you can handle it as needed
+	                                System.out.println("Invalid input. Exiting...");
+	                                return; // or any other action you want to take
+	                        }
+	                }
+
+	                // Now you have the selected keyword to use in your further operations
+	                System.out.println("You selected: " + keyword);
+
 	                try {
 	                    // Call displayPageRanking method with user input keyword
 	                    pagerank.displayPageRanking("Web_Crawl_Orbitz.xlsx","Web_Crawl_CarRentals.xlsx","Web_Crawl_Expedia.xlsx", keyword);
