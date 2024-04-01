@@ -274,9 +274,8 @@ public class Main {
 	                                keyword = "Vehicle Model";
 	                                break;
 	                            default:
-	                                // If the user still provides an invalid input, you can handle it as needed
 	                                System.out.println("Invalid input. Exiting...");
-	                                return; // or any other action you want to take
+	                                return; 
 	                        }
 	                }
 

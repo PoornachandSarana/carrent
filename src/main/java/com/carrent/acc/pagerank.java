@@ -92,7 +92,7 @@ public class pagerank {
 
         // Display the sorted merged page ranking along with occurrences in each file
         System.out.println("\n-----------------------------------------");
-        System.out.println("Ranking based on Vehicle Types Occurrences");
+        System.out.println("Ranking based on your preference");
         System.out.println("-----------------------------------------");
 
         for (Map.Entry<String, Integer> entry : sortedMergedPageRanking.entrySet()) {
