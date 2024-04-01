@@ -62,11 +62,9 @@ public class WordSuggestions {
         }
 
         List<String> listofcorrections = providecorrections(wordtospellcheck, 2, allcitiesin_canada); // threshold of edit distance in this case is 2
-        if (listofcorrections.isEmpty()) {
-            return null;
-        } else {
+        
             return listofcorrections;
-        }
+        
     }
 
     

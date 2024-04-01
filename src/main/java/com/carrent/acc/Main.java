@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.TreeMap;
 
@@ -40,24 +42,23 @@ public class Main {
 		String location = Helper.getInputString(scanner);
 		// TODO word completion
 		WordSuggestions wordSuggestions = new WordSuggestions();
-		List<String> suggestions = wordSuggestions.getCitySuggestions(location);       
-		if (suggestions.isEmpty()) {
-            System.out.println("No matching cities found.");
-        } else {
-            System.out.println("Matching cities:");
-            for (String suggestion : suggestions) {
-                System.out.println(suggestion);
-            }
-        }
+		List<String> suggestions = wordSuggestions.getCitySuggestions(location);   
 		List<String> checkSpelling = WordSuggestions.checkcitiesSpelling(location);
-		if(checkSpelling == null) {
+
+
+		 Set<String> mergedSuggestedCities = new HashSet<>(suggestions);
+		 mergedSuggestedCities.addAll(checkSpelling);
+
+        List<String> allSuggestedStrs = new ArrayList<>(mergedSuggestedCities);
+
+		if(allSuggestedStrs.isEmpty()) {
 			System.out.println("Please enter a valid city in Canada");
 			return getLocation(scanner);
-		} else if (checkSpelling.size() == 1 && checkSpelling.get(0).equalsIgnoreCase(location)) {
+		} else if (allSuggestedStrs.size() == 1 && allSuggestedStrs.get(0).equalsIgnoreCase(location)) {
 			return location;
 		} else {
 			StringJoiner joiner = new StringJoiner("/");
-			for (String correction : checkSpelling) {
+			for (String correction : allSuggestedStrs) {
 				if(location.equalsIgnoreCase(correction)) return location;
 				correction = correction.substring(0, 1).toUpperCase() + correction.substring(1);
 				joiner.add(correction);
@@ -193,6 +194,7 @@ public class Main {
 		List<CarRentalDetails> listofCars =  new ArrayList<>();
 		readCrawledFile(listofCars, "Web_Crawl_Orbitz.xlsx");
 		readCrawledFile(listofCars, "Web_Crawl_CarRentals.xlsx");
+		readCrawledFile(listofCars, "Web_Crawl_Expedia.xlsx");
 		return listofCars;
 	}
 
@@ -249,7 +251,7 @@ public class Main {
 	                } catch (IOException e) {
 	                    e.printStackTrace();
 	                }
-	                viewVehicleOptions(scanner); // After displaying pagerank, return to main menu
+	                viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker); // After displaying pagerank, return to main menu
 					break;
 			
 				default:
@@ -262,7 +264,7 @@ public class Main {
 		System.out.println("Please wait while we get the available vehicles………");
 		try {
 			System.setProperty("webdriver.chrome.driver",
-					"C:\\Users\\sunny\\Downloads\\chromedriver.exe");
+					"/Users/sheldonkevin/Downloads/chromedriver-mac-arm64/chromedriver");
 
 			ChromeOptions options = new ChromeOptions();
 
@@ -271,12 +273,11 @@ public class Main {
 			WebDriver driver = new ChromeDriver();
 			// Webcrawler.processCarRentalsWebsite(driver);
 
-			//TODO Webcrawler Carrentals
-			//TODO Webcrawler Avis
-
 			int rentLen = Integer.parseInt(duration);
 			Webcrawler.WebCrawlOrbitz(driver, startDate, endDate, rentLen, location);
 			Webcrawler.WebCrawlCarRentals(driver, startDate, endDate, rentLen, location);
+			HTMLFileDownloader.DownloadHTML(driver, startDate, endDate, location);
+			Parser.ParseHTML(rentLen);
 			driver.quit();
 			System.out.println("Thank you for your patience");
 			getAndCountVehicles(scanner);
