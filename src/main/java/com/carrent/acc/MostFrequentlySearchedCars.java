@@ -24,9 +24,6 @@ public class MostFrequentlySearchedCars {
         // Add the entries to the max heap
         maxHeap.clear(); // Clear the max heap before re-adding entries
         maxHeap.addAll(wordSearchCounts.entrySet());
-
-        // Display the top 3 most frequently searched words
-        // displayTopFrequentWords();
     }
 
     public void displayTopFrequentWords() {

@@ -146,7 +146,13 @@ public class InvertedIndex {
                 }
 
                 System.out.println("Choose a number from the list:");
-                int userChoice = scanner.nextInt();
+                String userChoiceStr = scanner.nextLine();
+                int userChoice;
+                try {
+                    userChoice = Integer.parseInt(userChoiceStr);
+                } catch (Exception e) {
+                    userChoice = optionMap.size() + 1;
+                }
                 String selectedOption = optionMap.get(userChoice);
 
                 if (selectedOption != null) {
@@ -171,7 +177,7 @@ public class InvertedIndex {
                         System.out.println(); // Add an empty line for separation
                     }
                 } else {
-                    System.out.println("Invalid choice.");
+                    System.out.println("You have entered an invalid input");
                 }
 
                 return;
@@ -208,8 +214,14 @@ public class InvertedIndex {
         System.out.println("3. Transmission");
         System.out.println("4. Cost");
 
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // consume newline
+        String enteredChoice = scanner.nextLine();
+
+        int choice;
+        try {
+            choice = Integer.parseInt(enteredChoice);
+        } catch (Exception e) {
+            choice = 5;
+        }
 
         String criteria = "";
         switch (choice) {

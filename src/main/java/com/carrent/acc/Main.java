@@ -209,7 +209,8 @@ public class Main {
 		viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
 	}
 
-	public static void viewVehicleOptions(Scanner scanner, List<CarRentalDetails> allCars, TreeMap<String, Integer> vehicleTypeCount, MostFrequentlySearchedCars wordTracker) {
+	public static void viewVehicleOptions(Scanner scanner, List<CarRentalDetails> allCars, TreeMap<String, Integer> vehicleTypeCount, MostFrequentlySearchedCars wordTracker, Integer... b) {
+		if(b.length == 0)
 		System.out.println("Please select the appropriate option below\n" +
 				"1. View entire list of available vehicles\n" +
 				"2. Filter based on Price, Transmission type, No. Of Passengers or Car Type\n" +
@@ -217,6 +218,9 @@ public class Main {
 				"4. We will make your work easier, Select 4 for to rank the data based on your preferences\n" +
 				"");
 		String appropriateOpt = scanner.nextLine();
+		if(appropriateOpt.equalsIgnoreCase("")) {
+			viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker, 1);
+		}else
 		if(!(appropriateOpt.equalsIgnoreCase("1") || appropriateOpt.equalsIgnoreCase("2") || appropriateOpt.equalsIgnoreCase("3") || appropriateOpt.equalsIgnoreCase("4"))) {
 			System.out.println("Please enter a valid option");
 			viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
@@ -316,7 +320,6 @@ public class Main {
 			Parser.ParseHTML(rentLen);
 			driver.quit();
 			System.out.println("Thank you for your patience");
-			getAndCountVehicles(scanner);
 		} catch (Exception e) {
 			System.out.println("There seems to be an error retrieving information. Would you like to try again? (Y/N)");
 			String tryAgain = Helper.getInputString(scanner);
@@ -325,6 +328,7 @@ public class Main {
 				return;
 			}
 		}
+		getAndCountVehicles(scanner);
 	}
 
 	public static void confirmRentalDetails(String startDate, String endDate, String location, String duration, Scanner scanner) {
