@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.StringJoiner;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -38,24 +40,23 @@ public class Main {
 		String location = Helper.getInputString(scanner);
 		// TODO word completion
 		WordSuggestions wordSuggestions = new WordSuggestions();
-		List<String> suggestions = wordSuggestions.getCitySuggestions(location);       
-		if (suggestions.isEmpty()) {
-            System.out.println("No matching cities found.");
-        } else {
-            System.out.println("Matching cities:");
-            for (String suggestion : suggestions) {
-                System.out.println(suggestion);
-            }
-        }
+		List<String> suggestions = wordSuggestions.getCitySuggestions(location);   
 		List<String> checkSpelling = WordSuggestions.checkcitiesSpelling(location);
-		if(checkSpelling == null) {
+
+
+		 Set<String> mergedSuggestedCities = new HashSet<>(suggestions);
+		 mergedSuggestedCities.addAll(checkSpelling);
+
+        List<String> allSuggestedStrs = new ArrayList<>(mergedSuggestedCities);
+
+		if(allSuggestedStrs.isEmpty()) {
 			System.out.println("Please enter a valid city in Canada");
 			return getLocation(scanner);
-		} else if (checkSpelling.size() == 1 && checkSpelling.get(0).equalsIgnoreCase(location)) {
+		} else if (allSuggestedStrs.size() == 1 && allSuggestedStrs.get(0).equalsIgnoreCase(location)) {
 			return location;
 		} else {
 			StringJoiner joiner = new StringJoiner("/");
-			for (String correction : checkSpelling) {
+			for (String correction : allSuggestedStrs) {
 				if(location.equalsIgnoreCase(correction)) return location;
 				correction = correction.substring(0, 1).toUpperCase() + correction.substring(1);
 				joiner.add(correction);
