@@ -3,3 +3,4 @@ target
 *.xlsx
 .project
 .DS_Store
+*.html
