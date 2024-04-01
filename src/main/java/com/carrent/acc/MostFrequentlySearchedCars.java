@@ -32,6 +32,7 @@ public class MostFrequentlySearchedCars {
     public void displayTopFrequentWords() {
         // Display the top 3 most frequent words
         int count = 0;
+        if(!maxHeap.isEmpty())
         System.out.println("Top 3 most frequently searched cars:");
         while (!maxHeap.isEmpty() && count < 3) {
             Map.Entry<String, Integer> entry = maxHeap.poll();

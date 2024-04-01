@@ -148,7 +148,6 @@ public class InvertedIndex {
                 System.out.println("Choose a number from the list:");
                 int userChoice = scanner.nextInt();
                 String selectedOption = optionMap.get(userChoice);
-                System.out.println(selectedOption);
 
                 if (selectedOption != null) {
                     // Call the searchWords method from MostFrequentlySearchedCars class      
