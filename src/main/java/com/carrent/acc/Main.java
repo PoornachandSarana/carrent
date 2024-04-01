@@ -183,6 +183,7 @@ public class Main {
 		List<CarRentalDetails> listofCars =  new ArrayList<>();
 		readCrawledFile(listofCars, "Web_Crawl_Orbitz.xlsx");
 		readCrawledFile(listofCars, "Web_Crawl_CarRentals.xlsx");
+		readCrawledFile(listofCars, "Web_Crawl_Expedia.xlsx");
 		return listofCars;
 	}
 
@@ -247,12 +248,11 @@ public class Main {
 			WebDriver driver = new ChromeDriver();
 			// Webcrawler.processCarRentalsWebsite(driver);
 
-			//TODO Webcrawler Carrentals
-			//TODO Webcrawler Avis
-
 			int rentLen = Integer.parseInt(duration);
 			Webcrawler.WebCrawlOrbitz(driver, startDate, endDate, rentLen, location);
 			Webcrawler.WebCrawlCarRentals(driver, startDate, endDate, rentLen, location);
+			HTMLFileDownloader.DownloadHTML(driver, startDate, endDate, location);
+			Parser.ParseHTML(rentLen);
 			driver.quit();
 			System.out.println("Thank you for your patience");
 			getAndCountVehicles(scanner);

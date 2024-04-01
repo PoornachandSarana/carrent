@@ -24,7 +24,7 @@ import java.util.Date;
 
 
 
-public class Webcrawler 
+public class Webcrawler
 {
 	public static void WebCrawlCarRentals(WebDriver driver, String startDate, String endDate, int duration, String location) {
 	    String excelFileName = "Web_Crawl_CarRentals.xlsx";
@@ -100,17 +100,17 @@ public class Webcrawler
 
 		public static String convertDateFormat(String inputDate, String outputFormat) {
 	        String formattedDate = "";
-	        
+
 	        try {
 	            SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	            SimpleDateFormat outputDateFormat = new SimpleDateFormat(outputFormat);
-	            
+
 	            Date date = inputDateFormat.parse(inputDate);
 	            formattedDate = outputDateFormat.format(date);
 	        } catch (ParseException e) {
 	            e.printStackTrace();
 	        }
-	        
+
 	        return formattedDate;
 	    }
 	

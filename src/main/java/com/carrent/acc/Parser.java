@@ -12,9 +12,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Parser {
-    {
+   public static void ParseHTML(int duration) {
     // Provide the path to your HTML file using either escaped backslashes or forward slashes
-    File input = new File("C:\\Users\\HP\\Documents\\GitHub\\TesterForCode\\html_content_selenium.html");
+    File input = new File("html_content_selenium.html");
     // Alternatively, you can use forward slashes, which don't need escaping
     // File input = new File("C:/Users/HP/Documents/GitHub/TesterForCode/html_content_selenium.html");
 
@@ -36,30 +36,32 @@ public class Parser {
         }
 
         // Select all offer cards
-        Elements offerCards = doc.select("li.offer-card-mobile");
+        Elements offerCards = doc.select("li.offer-card-desktop");
+        System.out.println(offerCards.size());
 
         // Iterate through each offer card
         int rowNum = 1;
         for (Element card : offerCards) {
             // Extract details from the card
-            String vehicleType = card.select("h2").text(); // Vehicle type
-            Elements details = card.select("ul.uitk-typelist li");
-
+            String vehicleType = card.select("h3").text(); // Vehicle type
+            Elements details = card.select(".uitk-text");
             String model = details.get(0).text().replaceAll(" or similar", ""); // Model (remove "or similar")
             String baseUrl = "https://www.expedia.ca";
             // Extract capacity, transmission, and cost
             Element capacityElement = details.get(1);
             String capacity = capacityElement.text().substring(0, 1); // Capacity (first character)
             String transmission = capacityElement.text().substring(8).replaceAll("\\d+ person.*", "").trim(); // Transmission (remove first 8 characters, "X person" and trim)
-            String cost = card.select("div.uitk-price-lockup > section > span.uitk-lockup-price").text();
+            String cost = card.select("span.uitk-lockup-price").text();
             String reserveLink = card.selectFirst("a").attr("href");
 
 
             // Remove the first 4 characters from the cost
             if (cost.length() > 4) {
                 cost = cost.substring(4);
+                cost = cost.replaceAll(",", "");
             }
 
+            cost = String.valueOf(Integer.parseInt(cost)/duration);
             // Create a new row in the sheet
             Row row = sheet.createRow(rowNum++);
             // Write data to the cells
@@ -72,16 +74,16 @@ public class Parser {
         }
 
         // Write the workbook content to a file
-        FileOutputStream fileOut = new FileOutputStream("VehicleDetails.xlsx");
+        FileOutputStream fileOut = new FileOutputStream("Web_Crawl_Expedia.xlsx");
         workbook.write(fileOut);
         fileOut.close();
 
         // Close the workbook to release resources
         workbook.close();
 
-        System.out.println("Excel file created successfully.");
-
     } catch (IOException e) {
         e.printStackTrace();
     }
-}}
+}
+
+}
