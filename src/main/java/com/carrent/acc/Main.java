@@ -238,7 +238,7 @@ public class Main {
 		System.out.println("Please wait while we get the available vehicles………");
 		try {
 			System.setProperty("webdriver.chrome.driver",
-					"C:\\Users\\sunny\\Downloads\\chromedriver.exe");
+					"/Users/sheldonkevin/Downloads/chromedriver-mac-arm64/chromedriver");
 
 			ChromeOptions options = new ChromeOptions();
 

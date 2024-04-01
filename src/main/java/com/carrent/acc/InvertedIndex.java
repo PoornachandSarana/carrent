@@ -196,7 +196,7 @@ public class InvertedIndex {
     public static void FilterFromExcel(Scanner scanner, MostFrequentlySearchedCars wordTracker) {
 
         InvertedIndex index = new InvertedIndex();
-        String[] excelFiles = {"C:\\Users\\sunny\\Desktop\\carrent\\Web_Crawl_CarRentals.xlsx", "C:\\Users\\sunny\\Desktop\\carrent\\Web_Crawl_Orbitz.xlsx"}; // Provide the paths to your Excel files
+        String[] excelFiles = {"Web_Crawl_CarRentals.xlsx", "Web_Crawl_Orbitz.xlsx"}; // Provide the paths to your Excel files
         index.buildIndex(excelFiles);
 
         System.out.println("Enter the filtering criteria:");
