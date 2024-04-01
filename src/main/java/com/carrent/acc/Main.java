@@ -222,7 +222,7 @@ public class Main {
 					break;
 				case 2:
 				    System.out.println("Selected option 2");
-				    InvertedIndex.FilterFromExcel(scanner, wordTracker);
+				    InvertedIndex.FilterFromExcel(scanner, wordTracker, vehicleTypeCount);
 					viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
 					break;
 				case 3:
@@ -297,7 +297,6 @@ public class Main {
 		System.out.println();
 		Scanner scanner = new Scanner(System.in);
 		startApp(scanner);
-//		getAndCountVehicles(scanner);
 		scanner.close();
 	}
 

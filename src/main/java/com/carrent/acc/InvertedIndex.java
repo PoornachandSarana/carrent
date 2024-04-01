@@ -109,7 +109,7 @@ public class InvertedIndex {
         return filteredResults;
     }
 
-    public void displayOptions(String criteria, MostFrequentlySearchedCars wordTracker, Scanner scanner) {
+    public void displayOptions(String criteria, MostFrequentlySearchedCars wordTracker, Scanner scanner, TreeMap<String, Integer> vehicleTypeCount) {
         if (criteria.equals("Vehicle Type") || criteria.equals("Vehicle Model")
                 || criteria.equals("Number of Passengers") || criteria.equals("Transmission")
                 || criteria.equals("Cost")) {
@@ -152,9 +152,13 @@ public class InvertedIndex {
 
                 if (selectedOption != null) {
                     // Call the searchWords method from MostFrequentlySearchedCars class      
-                    if(criteria.equals("Vehicle Type"))          
-                    wordTracker.searchWords(selectedOption);
-                    
+                    if(criteria.equals("Vehicle Type"))  {
+                        if(vehicleTypeCount.get(selectedOption) != null) {
+                            System.out.println("There are "+ vehicleTypeCount.get(selectedOption)+ " options of type " + selectedOption);
+                        }
+                        wordTracker.searchWords(selectedOption);
+                    }
+
                     System.out.println("Filtered Results based on " + criteria + " - " + selectedOption + ":");
                     List<String[]> filteredResults = filterByCriteria(criteria, selectedOption);
                     for (String[] attributes : filteredResults) {
@@ -193,7 +197,7 @@ public class InvertedIndex {
         }
     }
 
-    public static void FilterFromExcel(Scanner scanner, MostFrequentlySearchedCars wordTracker) {
+    public static void FilterFromExcel(Scanner scanner, MostFrequentlySearchedCars wordTracker, TreeMap<String, Integer> vehicleTypeCount) {
 
         InvertedIndex index = new InvertedIndex();
         String[] excelFiles = {"Web_Crawl_CarRentals.xlsx", "Web_Crawl_Orbitz.xlsx", "Web_Crawl_Expedia.xlsx"}; // Provide the paths to your Excel files
@@ -228,7 +232,7 @@ public class InvertedIndex {
                 return;
         }
 
-        index.displayOptions(criteria, wordTracker, scanner);
+        index.displayOptions(criteria, wordTracker, scanner, vehicleTypeCount);
 
     }
 }
