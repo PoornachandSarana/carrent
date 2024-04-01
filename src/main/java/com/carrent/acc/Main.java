@@ -215,7 +215,7 @@ public class Main {
 				"1. View entire list of available vehicles\n" +
 				"2. Filter based on Price, Transmission type, No. Of Passengers or Car Type\n" +
 				"3. Crawl Data Again\n" +
-				"4. page rankn\n" +
+				"4. We will make your work easier, Select 4 for to rank the data based on your preferences\n" +
 				"");
 		String appropriateOpt = scanner.nextLine();
 		if(!(appropriateOpt.equalsIgnoreCase("1") || appropriateOpt.equalsIgnoreCase("2") || appropriateOpt.equalsIgnoreCase("3") || appropriateOpt.equalsIgnoreCase("4"))) {
@@ -241,13 +241,13 @@ public class Main {
 				startApp(scanner);
 					break;
 	            case 4: // Case for pagerank
-	                System.out.println("Selected option 4: PageRank");
+	                System.out.println("Let me help you in ranking");
 	                // Prompt user for keyword
-	                System.out.println("Enter a keyword to perform page ranking:");
+	                System.out.println("What is your preference (Vehicle Type or Vehicle Model):");
 	                String keyword = scanner.nextLine();
 	                try {
 	                    // Call displayPageRanking method with user input keyword
-	                    pagerank.displayPageRanking("Web_Crawl_Orbitz.xlsx","Web_Crawl_CarRentals.xlsx", keyword);
+	                    pagerank.displayPageRanking("Web_Crawl_Orbitz.xlsx","Web_Crawl_CarRentals.xlsx","Web_Crawl_Expedia.xlsx", keyword);
 	                } catch (IOException e) {
 	                    e.printStackTrace();
 	                }
@@ -264,7 +264,7 @@ public class Main {
 		System.out.println("Please wait while we get the available vehicles………");
 		try {
 			System.setProperty("webdriver.chrome.driver",
-					"/Users/sheldonkevin/Downloads/chromedriver-mac-arm64/chromedriver");
+					"C:\\Users\\USER\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
 
 			ChromeOptions options = new ChromeOptions();
 
