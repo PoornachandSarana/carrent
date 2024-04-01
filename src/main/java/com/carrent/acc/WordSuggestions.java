@@ -62,10 +62,88 @@ public class WordSuggestions {
         }
 
         List<String> listofcorrections = providecorrections(wordtospellcheck, 2, allcitiesin_canada); // threshold of edit distance in this case is 2
-        if (listofcorrections.isEmpty()) {
-            return null;
-        } else {
+        
             return listofcorrections;
+        
+    }
+
+    
+    //BST for storing the cities in canada
+
+    private static class BSTNode 
+    {
+        String city;
+        BSTNode left, right;
+
+        public BSTNode(String city) 
+        {
+            this.city = city;
+            this.left = this.right = null;
         }
     }
+
+    private BSTNode root;
+
+    public WordSuggestions() 
+    {
+        root = null;
+        loadCitiesFromFile();
+    }
+
+    private void loadCitiesFromFile() 
+    {
+        try (BufferedReader br = new BufferedReader(new FileReader("canadiancities.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) 
+            {
+                insert(line);
+            }
+        } catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void insert(String city) 
+    {
+        root = insertRec(root, city);
+    }
+
+    private BSTNode insertRec(BSTNode root, String city) 
+    {
+        if (root == null) 
+        {
+            root = new BSTNode(city);
+            return root;
+        }
+
+        if (city.compareToIgnoreCase(root.city) < 0)
+            root.left = insertRec(root.left, city);
+        else if (city.compareToIgnoreCase(root.city) > 0)
+            root.right = insertRec(root.right, city);
+
+        return root;
+    }
+
+    List<String> getCitySuggestions(String partialName) 
+    {
+        List<String> suggestions = new ArrayList<>();
+        getCitySuggestionsRec(root, partialName.toLowerCase(), suggestions);
+        return suggestions;
+    }
+
+    private void getCitySuggestionsRec(BSTNode root, String prefix, List<String> result) 
+    {
+        if (root == null)
+            return;
+
+        if (root.city.toLowerCase().startsWith(prefix))
+            result.add(root.city);
+
+        if (prefix.compareToIgnoreCase(root.city) < 0)
+            getCitySuggestionsRec(root.left, prefix, result);
+        else
+            getCitySuggestionsRec(root.right, prefix, result);
+    }
+    
 }

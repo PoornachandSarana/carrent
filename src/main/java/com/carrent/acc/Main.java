@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.TreeMap;
 
@@ -39,15 +41,24 @@ public class Main {
 		System.out.println("Please enter the location where you want to rent your car: ");
 		String location = Helper.getInputString(scanner);
 		// TODO word completion
+		WordSuggestions wordSuggestions = new WordSuggestions();
+		List<String> suggestions = wordSuggestions.getCitySuggestions(location);   
 		List<String> checkSpelling = WordSuggestions.checkcitiesSpelling(location);
-		if(checkSpelling == null) {
+
+
+		 Set<String> mergedSuggestedCities = new HashSet<>(suggestions);
+		 mergedSuggestedCities.addAll(checkSpelling);
+
+        List<String> allSuggestedStrs = new ArrayList<>(mergedSuggestedCities);
+
+		if(allSuggestedStrs.isEmpty()) {
 			System.out.println("Please enter a valid city in Canada");
 			return getLocation(scanner);
-		} else if (checkSpelling.size() == 1 && checkSpelling.get(0).equalsIgnoreCase(location)) {
+		} else if (allSuggestedStrs.size() == 1 && allSuggestedStrs.get(0).equalsIgnoreCase(location)) {
 			return location;
 		} else {
 			StringJoiner joiner = new StringJoiner("/");
-			for (String correction : checkSpelling) {
+			for (String correction : allSuggestedStrs) {
 				if(location.equalsIgnoreCase(correction)) return location;
 				correction = correction.substring(0, 1).toUpperCase() + correction.substring(1);
 				joiner.add(correction);
@@ -204,9 +215,10 @@ public class Main {
 				"1. View entire list of available vehicles\n" +
 				"2. Filter based on Price, Transmission type, No. Of Passengers or Car Type\n" +
 				"3. Crawl Data Again\n" +
+				"4. We will make your work easier, Select 4 for to rank the data based on your preferences\n" +
 				"");
 		String appropriateOpt = scanner.nextLine();
-		if(!(appropriateOpt.equalsIgnoreCase("1") || appropriateOpt.equalsIgnoreCase("2") || appropriateOpt.equalsIgnoreCase("3"))) {
+		if(!(appropriateOpt.equalsIgnoreCase("1") || appropriateOpt.equalsIgnoreCase("2") || appropriateOpt.equalsIgnoreCase("3") || appropriateOpt.equalsIgnoreCase("4"))) {
 			System.out.println("Please enter a valid option");
 			viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker);
 		}
@@ -228,6 +240,56 @@ public class Main {
 				case 3:
 				startApp(scanner);
 					break;
+	            case 4: // Case for pagerank
+	                System.out.println("Let me help you in ranking");
+	             // Prompt user for preference
+	                System.out.println("Please select your preference:");
+	                System.out.println("1. Vehicle Type");
+	                System.out.println("2. Vehicle Model");
+	                System.out.print("Enter the corresponding number: ");
+
+	                // Read user input
+	                String preferenceInput = scanner.nextLine();
+
+	                // Handle user preference
+	                String keyword;
+	                switch (preferenceInput) {
+	                    case "1":
+	                        keyword = "Vehicle Type";
+	                        break;
+	                    case "2":
+	                        keyword = "Vehicle Model";
+	                        break;
+	                    default:
+	                        System.out.println("Invalid input. Please enter either '1' for Vehicle Type or '2' for Vehicle Model.");
+	                        // Ask the user to input again
+	                        System.out.println("Please try again:");
+	                        preferenceInput = scanner.nextLine();
+	                        // Handle user preference again
+	                        switch (preferenceInput) {
+	                            case "1":
+	                                keyword = "Vehicle Type";
+	                                break;
+	                            case "2":
+	                                keyword = "Vehicle Model";
+	                                break;
+	                            default:
+	                                System.out.println("Invalid input. Exiting...");
+	                                return; 
+	                        }
+	                }
+
+	                // Now you have the selected keyword to use in your further operations
+	                System.out.println("You selected: " + keyword);
+
+	                try {
+	                    // Call displayPageRanking method with user input keyword
+	                    pagerank.displayPageRanking("Web_Crawl_Orbitz.xlsx","Web_Crawl_CarRentals.xlsx","Web_Crawl_Expedia.xlsx", keyword);
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	                viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker); // After displaying pagerank, return to main menu
+					break;
 			
 				default:
 					break;
@@ -239,7 +301,7 @@ public class Main {
 		System.out.println("Please wait while we get the available vehicles………");
 		try {
 			System.setProperty("webdriver.chrome.driver",
-					"/Users/sheldonkevin/Downloads/chromedriver-mac-arm64/chromedriver");
+					"C:\\Users\\USER\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
 
 			ChromeOptions options = new ChromeOptions();
 
