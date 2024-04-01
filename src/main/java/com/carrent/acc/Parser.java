@@ -37,7 +37,6 @@ public class Parser {
 
         // Select all offer cards
         Elements offerCards = doc.select("li.offer-card-desktop");
-        System.out.println(offerCards.size());
 
         // Iterate through each offer card
         int rowNum = 1;

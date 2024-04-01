@@ -185,7 +185,6 @@ public class Main {
             }
 			return listofCars;
         } catch (IOException e) {
-            e.printStackTrace();
 			return null;
         }
 	}
@@ -319,7 +318,6 @@ public class Main {
 			System.out.println("Thank you for your patience");
 			getAndCountVehicles(scanner);
 		} catch (Exception e) {
-			e.printStackTrace();
 			System.out.println("There seems to be an error retrieving information. Would you like to try again? (Y/N)");
 			String tryAgain = Helper.getInputString(scanner);
 			if(tryAgain.equalsIgnoreCase("y")) {
