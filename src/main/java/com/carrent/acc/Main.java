@@ -251,7 +251,7 @@ public class Main {
 	                } catch (IOException e) {
 	                    e.printStackTrace();
 	                }
-	                viewVehicleOptions(scanner); // After displaying pagerank, return to main menu
+	                viewVehicleOptions(scanner, allCars, vehicleTypeCount, wordTracker); // After displaying pagerank, return to main menu
 					break;
 			
 				default:
