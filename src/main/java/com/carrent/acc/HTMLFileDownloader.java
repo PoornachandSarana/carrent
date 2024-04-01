@@ -7,24 +7,27 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class HTMLFileDownloader {
-    public static void main(String[] args) {
-        // Set the path to the ChromeDriver executable
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\HP\\Downloads\\chromedriver-win64\\chromedriver.exe");
+    public static void DownloadHTML(WebDriver driver, String startDate, String endDate, String location) {
 
-        // Instantiate ChromeOptions to set preferences such as headless mode
-        ChromeOptions options = new ChromeOptions();
+		String convertedFromDate = Webcrawler.convertDateFormat(startDate, "dd/MM/yyyy");
+        String convertedToDate = Webcrawler.convertDateFormat(endDate, "dd/MM/yyyy");
 
-        // Instantiate ChromeDriver with ChromeOptions
-        WebDriver driver = new ChromeDriver(options);
+        String encodedLocation = URLEncoder.encode(location, StandardCharsets.UTF_8);
+		String encodedFromDate = URLEncoder.encode(convertedFromDate, StandardCharsets.UTF_8);
+		String encodedToDate = URLEncoder.encode(convertedToDate, StandardCharsets.UTF_8);
+		String url = String.format("https://www.expedia.ca/carsearch?locn=%s&loc2=&date1=%s&date2=%s",
+                    encodedLocation, encodedFromDate, encodedToDate);
 
-        // URL to download HTML from
-        String url = "https://www.expedia.ca/carsearch?locn=Windsor&loc2=&date1=13%2F04%2F2024&date2=14%2F04%2F2024";
 
         try {
             // Open the URL in the WebDriver
             driver.get(url);
+    		driver.manage().window().fullscreen();
+
             try {
                 Thread.sleep(10000); // You can remove this line if you don't need to pause
             } catch (InterruptedException e) {
@@ -39,8 +42,6 @@ public class HTMLFileDownloader {
             BufferedWriter writer = new BufferedWriter(new FileWriter(destinationFile));
             writer.write(htmlContent);
             writer.close();
-
-            System.out.println("HTML content downloaded and saved to: " + destinationFile);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

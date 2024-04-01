@@ -195,7 +195,4 @@ public class Webcrawler
 				throw new RuntimeException("Error has occurred during the web crawl");
 			}
 		}
-		public static void HTMLParse(WebDriver driver, String startDate, String endDate, String location){
-
-		}
 }
