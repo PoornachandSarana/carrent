@@ -24,14 +24,12 @@ public class MostFrequentlySearchedCars {
         // Add the entries to the max heap
         maxHeap.clear(); // Clear the max heap before re-adding entries
         maxHeap.addAll(wordSearchCounts.entrySet());
-
-        // Display the top 3 most frequently searched words
-        // displayTopFrequentWords();
     }
 
     public void displayTopFrequentWords() {
         // Display the top 3 most frequent words
         int count = 0;
+        if(!maxHeap.isEmpty())
         System.out.println("Top 3 most frequently searched cars:");
         while (!maxHeap.isEmpty() && count < 3) {
             Map.Entry<String, Integer> entry = maxHeap.poll();
